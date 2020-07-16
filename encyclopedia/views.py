@@ -7,7 +7,7 @@ from . import util
 
 import markdown2
 
-from .searchform import SearchForm
+from .forms import SearchForm, NewPageForm
 
 
 def index(request):
@@ -49,3 +49,27 @@ def search(request):
                 return redirect('index')
         else:
             return redirect('index')
+
+
+def newpage(request):
+    return render(request, "encyclopedia/newpage.html")
+
+
+def savenewpage(request):
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+
+            entries = util.list_entries()
+
+            if title.lower() in [entry.lower() for entry in entries]:
+                return render(request, "encyclopedia/error_newpage.html", {
+                    "title": title
+                })
+
+            util.save_entry(title, content)
+
+            return redirect('title', title)
+    return redirect('index')
