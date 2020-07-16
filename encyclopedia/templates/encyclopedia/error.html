@@ -1,9 +1,11 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-  {{ title }}
+  Error
 {% endblock %}
 
 {% block body %}
-  {{ entry | safe }}
+  <h1>Error</h1>
+
+  There was no entry with title <strong>{{ title }}</strong>.
 {% endblock %}
