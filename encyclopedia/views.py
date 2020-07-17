@@ -9,6 +9,9 @@ import markdown2
 
 from .forms import *
 
+import random
+
+# global variable
 current_title = ""
 
 def index(request):
@@ -97,3 +100,9 @@ def saveeditpage(request):
             util.save_entry(current_title, editcontent)
             return redirect('title', current_title)
     return redirect('index')
+
+
+def randompage(request):
+    entries = util.list_entries()
+    random_title = random.choice(entries)
+    return redirect('title', random_title)
