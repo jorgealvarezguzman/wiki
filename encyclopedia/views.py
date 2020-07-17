@@ -7,8 +7,9 @@ from . import util
 
 import markdown2
 
-from .forms import SearchForm, NewPageForm
+from .forms import *
 
+current_title = ""
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -17,6 +18,8 @@ def index(request):
 
 
 def title(request, title):
+    global current_title
+    current_title = title
     entry = util.get_entry(title)
 
     if entry is None:
@@ -72,4 +75,25 @@ def savenewpage(request):
             util.save_entry(title, content)
 
             return redirect('title', title)
+    return redirect('index')
+
+
+def editpage(request):
+    global current_title
+    entry = util.get_entry(current_title)
+    return render(request, "encyclopedia/editpage.html",{
+        "title": current_title,
+        "entry": entry
+    })
+
+
+def saveeditpage(request):
+    global current_title
+    if request.method == "POST":
+        form = EditPageForm(request.POST)
+        if form.is_valid():
+            editcontent = form.cleaned_data["editcontent"]
+
+            util.save_entry(current_title, editcontent)
+            return redirect('title', current_title)
     return redirect('index')

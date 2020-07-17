@@ -7,3 +7,6 @@ class SearchForm(forms.Form):
 class NewPageForm(forms.Form):
     title = forms.CharField(label="title")
     content = forms.CharField(label="content")
+
+class EditPageForm(forms.Form):
+    editcontent = forms.CharField(label="editcontent")
